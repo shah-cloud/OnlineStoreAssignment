@@ -5,7 +5,9 @@ import slick.lifted.ProvenShape
 
 trait VerifyUserComponent extends UsersComponent {
 
-  class VerifyUser(tag: Tag) extends Table[(Int, String)](tag, "VERIFY") {
+  val verifier = TableQuery[VerifyUser]
+
+  class VerifyUser(tag: Tag) extends Table[(Int, String)](tag, "VERIFY_USER") {
 
     def * : ProvenShape[(Int, String)] = (userId, emailVerify)
 
@@ -16,7 +18,5 @@ trait VerifyUserComponent extends UsersComponent {
     def userIdFk = foreignKey("USER_ID_FK", userId, users)(_.id, onUpdate = ForeignKeyAction.Restrict, onDelete = ForeignKeyAction.Cascade)
 
   }
-
-  val verifier = TableQuery[VerifyUser]
 
 }

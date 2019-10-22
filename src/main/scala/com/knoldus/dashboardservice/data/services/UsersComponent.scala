@@ -6,6 +6,8 @@ import slick.lifted.ProvenShape
 
 trait UsersComponent {
 
+  val users = TableQuery[Users]
+
   class Users(tag: Tag) extends Table[User](tag, "USERS") {
 
 
@@ -20,7 +22,5 @@ trait UsersComponent {
     def emailId: Rep[String] = column[String]("emailId")
 
   }
-
-  val users = TableQuery[Users]
 
 }

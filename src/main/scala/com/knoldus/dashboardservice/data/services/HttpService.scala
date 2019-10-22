@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
-import com.knoldus.dashboardservice.connection.HttpConnection.{httpHost, httpPort}
+import com.knoldus.dashboardservice.dashboard.util.ConfigProperties._
 import com.knoldus.dashboardservice.connection.MySQLImpl
 import com.knoldus.dashboardservice.routes.Routes
 

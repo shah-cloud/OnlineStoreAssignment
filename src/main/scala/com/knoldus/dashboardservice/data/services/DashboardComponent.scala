@@ -16,6 +16,16 @@ trait DashboardComponent extends VerifyUserComponent with CartComponent with Ite
       users.result
     }
 
+    def getUserProfile(userID: Int) = db.run {
+      users.filter(_.id === userID).result
+    }
+
+    def getClearVerivierData = db.run {
+      DBIO.seq(
+        verifier.schema.dropIfExists
+      )
+    }
+
     def vall = db.run {
       verifier.result
     }
@@ -33,12 +43,13 @@ trait DashboardComponent extends VerifyUserComponent with CartComponent with Ite
         users.schema.createIfNotExists,
         users += user
       )
-
     }
 
-    def insert(item: Item) = db.run {
-      items += item
-
+    def insert(item: Item) = db.run{
+      DBIO.seq(
+        items.schema.createIfNotExists,
+        items += item
+      )
     }
 
     def addItemIntoCart(uId: Int, item: Item, q: Int) = {
@@ -77,14 +88,16 @@ trait DashboardComponent extends VerifyUserComponent with CartComponent with Ite
     }
 
 
-    def verifyUser(id: Int, verification: String) = {
-      val col = verifier.filter(_.userId === id).map(_.emailVerify)
-      db.run(col.update(verification))
+    def verifyUser(id: Int, verification: String) = db.run{
+      verifier.filter(_.userId === id).map(_.emailVerify).update(verification)
     }
 
-    def removeItem(userId: Int, itemNo: Int) = {
-      val col = cart.filter(value => value.itemNo === itemNo && value.userId === userId).delete
-      db.run(col)
+    def removeItem(userId: Int, itemNo: Int) = db.run{
+      cart.filter(value => value.itemNo === itemNo && value.userId === userId).delete
+    }
+
+    def getClearCart(userId: Int) = db.run{
+      cart.filter(_.userId === userId).delete
     }
 
     def sortPrice(order: String): Future[Seq[Item]] = db.run {

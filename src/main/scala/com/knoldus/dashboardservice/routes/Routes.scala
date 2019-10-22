@@ -7,19 +7,10 @@ import com.knoldus.dashboardservice.data.model.{Item, User}
 import com.knoldus.dashboardservice.data.services.DashboardComponent
 
 
-class Routes(repo: DashboardComponent#DashboardServices)
-  extends JsonSupport {
+class Routes(repo: DashboardComponent#DashboardServices) extends JsonSupport {
 
   val route: Route =
     concat(
-      path("addItem") {
-        post {
-          entity(as[Item]) { item => // will unmarshal JSON to Order
-            repo.insert(item)
-            complete(s"Item added successfully")
-          }
-        }
-      },
       path("addItem") {
         post {
           entity(as[Item]) { item => // will unmarshal JSON to Order
@@ -49,18 +40,35 @@ class Routes(repo: DashboardComponent#DashboardServices)
               repo.verifyUser(userId, "yes")
               val loginlink = s"http://localhost:8080/login-link/$userId"
               complete(s"Successfully Verified\nHere is your login link : $loginlink")
-            case util.Failure(ex) => complete("shah")
+            case util.Failure(ex) => complete(ex)
           }
         }
       },
       get {
         path("login-link" / IntNumber) { userId =>
-          val cartlink = s"http://localhost:8080/cart/$userId"
-          val itemslink = s"http://localhost:8080/items"
-          val linkToAddItem = s"http://localhost:8080/addItemIntoCart/$userId"
-          complete(s"You have login successfully\nHere is your cart link : $cartlink\nHere is your items link : $itemslink\n Here is the link to add item in cart : $linkToAddItem")
+          onComplete(repo.authenticateUser(userId)) {
+            case util.Success(res) if res.head._2 == "yes" =>
+              val cartLink = s"http://localhost:8080/cart/$userId"
+              val itemsLink = s"http://localhost:8080/items"
+              val linkToAddItem = s"http://localhost:8080/addItemIntoCart/$userId"
+              val profileLink = s"http://localhost:8080/user-profile/$userId"
+              val editProfileLink = s"http://localhost:8080/edit-profile"
+              val removeItemFromCartLink = s"http://localhost:8080/removeItemFromCart/$userId"
+              val placeOrderLink = s"http://localhost:8080/place-order/$userId"
+              complete(s"You have login successfully\nHere is your cart link : $cartLink\n"
+                + s"Here is your items link : $itemsLink\n"
+                + s"Here is the link to add item in cart : $linkToAddItem\n"
+                + s"Here is your profile link : $profileLink\n"
+                + s"Here is the link to edit profile : $editProfileLink\n"
+                + s"Here is the link to remove item from cart : $removeItemFromCartLink\n"
+                + s"Here is the link to place order : $placeOrderLink"
+              )
+            case util.Success(res) =>
+              val link = s"http://localhost:8080/verification-link/$userId"
+              complete(s"Yet user not verify\nTo verify go through the link\n Here is the link $link")
+            case util.Failure(ex) => complete(ex)
+          }
         }
-
       },
       get {
         path("items") {
@@ -116,7 +124,8 @@ class Routes(repo: DashboardComponent#DashboardServices)
           onComplete(repo.authenticateUser(userId)) {
             case util.Success(res) if res.head._2 == "yes" =>
               repo.removeItem(userId, itemNo)
-              complete("Item removed successfully")
+              val cartlink = s"http://localhost:8080/cart/$userId"
+              complete(s"Item removed successfully\nHere is your cart link:\n $cartlink")
             case util.Success(res) =>
               val link = s"http://localhost:8080/verification-link/$userId"
               complete(s"Yet user not verify\nTo verify go through the link\n Here is the link $link")
@@ -124,26 +133,40 @@ class Routes(repo: DashboardComponent#DashboardServices)
           }
         }
       },
-      path("vdata") {
+      path("verifierdata") {
         get {
-          onComplete(repo.vall) {
-            case util.Success(value) => complete("List is as follows " + value)
-          }
-          //            complete(repo.vall)
+          complete(repo.vall)
+        }
+      },
+      path("removeVerifierdata") {
+        get {
+          repo.getClearVerivierData
+          complete("Cleared Successfully")
         }
       },
       path("userdata") {
         get {
-
           complete(repo.getAllUsers)
         }
       },
-      path("update") {
+      path("edit-profile") {
         post {
           entity(as[User]) { user => // will unmarshal JSON to Order
             repo.update(user)
             complete("Updated successfully")
           }
+        }
+      },
+      get {
+        path("user-profile" / IntNumber) { userId =>
+          complete(repo.getUserProfile(userId))
+        }
+      },
+      get {
+        path("place-order" / IntNumber) { userId =>
+          repo.getClearCart(userId)
+          val cartlink = s"http://localhost:8080/cart/$userId"
+          complete(s"Order placed successfully\nHere is your cart link:\n$cartlink")
         }
       }
     )
