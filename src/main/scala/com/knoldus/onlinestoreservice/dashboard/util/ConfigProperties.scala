@@ -1,4 +1,4 @@
-package com.knoldus.dashboardservice.dashboard.util
+package com.knoldus.onlinestoreservice.dashboard.util
 
 import com.typesafe.config.{Config, ConfigFactory}
 

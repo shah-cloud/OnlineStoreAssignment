@@ -15,12 +15,13 @@ object Dependencies {
   val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.1.10"
   val akkaStream = "com.typesafe.akka" %% "akka-stream" % "2.5.23"
   val akkaSprayJson = "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.10"
+  val h2 = "com.h2database" % "h2" % "1.4.192"
 
   /** Test libraries */
   val scalaTest: ModuleID = "org.scalatest" %% "scalatest" % scalaTestVersion
 
   val mock: ModuleID = "org.mockito" % "mockito-core" % "2.27.0"
 
-  val dashboardDependencies: Seq[ModuleID] = Seq(akkaHttp, slickDb,akkaStream, scalaTest, akkaSprayJson, mock, playJson, logback, config, slick, mysqlConnec)
+  val dashboardDependencies: Seq[ModuleID] = Seq(akkaHttp, slickDb, akkaStream, h2, scalaTest, akkaSprayJson, mock, playJson, logback, config, slick, mysqlConnec)
 
 }

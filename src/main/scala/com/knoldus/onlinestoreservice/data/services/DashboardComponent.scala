@@ -1,7 +1,7 @@
-package com.knoldus.dashboardservice.data.services
+package com.knoldus.onlinestoreservice.data.services
 
-import com.knoldus.dashboardservice.connection.DB
-import com.knoldus.dashboardservice.data.model.{CartSchema, Item, User}
+import com.knoldus.onlinestoreservice.connection.DB
+import com.knoldus.onlinestoreservice.data.model.{CartSchema, Item, User}
 import slick.jdbc.MySQLProfile.api._
 
 import scala.concurrent.{ExecutionContext, Future}

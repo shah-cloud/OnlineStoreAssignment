@@ -1,4 +1,4 @@
-package com.knoldus.dashboardservice.data.services
+package com.knoldus.onlinestoreservice.data.services
 
 import slick.jdbc.MySQLProfile.api._
 import slick.lifted.ProvenShape

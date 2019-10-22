@@ -1,12 +1,12 @@
-package com.knoldus.dashboardservice.data.services
+package com.knoldus.onlinestoreservice.data.services
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
-import com.knoldus.dashboardservice.dashboard.util.ConfigProperties._
-import com.knoldus.dashboardservice.connection.MySQLImpl
-import com.knoldus.dashboardservice.routes.Routes
+import com.knoldus.onlinestoreservice.dashboard.util.ConfigProperties._
+import com.knoldus.onlinestoreservice.connection.MySQLImpl
+import com.knoldus.onlinestoreservice.routes.Routes
 
 import scala.concurrent.ExecutionContextExecutor
 

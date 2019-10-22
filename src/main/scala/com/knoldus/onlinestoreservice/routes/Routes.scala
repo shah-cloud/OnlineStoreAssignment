@@ -1,10 +1,10 @@
-package com.knoldus.dashboardservice.routes
+package com.knoldus.onlinestoreservice.routes
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import com.knoldus.dashboardservice.dashboard.util.JsonSupport
-import com.knoldus.dashboardservice.data.model.{Item, User}
-import com.knoldus.dashboardservice.data.services.DashboardComponent
+import com.knoldus.onlinestoreservice.dashboard.util.JsonSupport
+import com.knoldus.onlinestoreservice.data.model.{Item, User}
+import com.knoldus.onlinestoreservice.data.services.DashboardComponent
 
 
 class Routes(repo: DashboardComponent#DashboardServices) extends JsonSupport {

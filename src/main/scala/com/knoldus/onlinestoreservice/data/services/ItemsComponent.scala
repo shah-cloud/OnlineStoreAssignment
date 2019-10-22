@@ -1,6 +1,6 @@
-package com.knoldus.dashboardservice.data.services
+package com.knoldus.onlinestoreservice.data.services
 
-import com.knoldus.dashboardservice.data.model.Item
+import com.knoldus.onlinestoreservice.data.model.Item
 import slick.jdbc.MySQLProfile.api._
 import slick.lifted.ProvenShape
 

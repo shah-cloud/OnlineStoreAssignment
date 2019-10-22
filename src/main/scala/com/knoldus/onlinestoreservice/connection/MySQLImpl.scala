@@ -1,4 +1,4 @@
-package com.knoldus.dashboardservice.connection
+package com.knoldus.onlinestoreservice.connection
 
 import slick.jdbc.JdbcProfile
 

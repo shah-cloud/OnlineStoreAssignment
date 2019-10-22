@@ -1,4 +1,4 @@
-package com.knoldus.dashboardservice.data.model
+package com.knoldus.onlinestoreservice.data.model
 
 case class Item(
                  itemNo: Int,
