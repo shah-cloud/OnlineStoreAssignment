@@ -102,14 +102,4 @@ class DashboardServicesSpec extends AsyncWordSpec with ScalaFutures {
     }
   }
 
-//  "removeItemFromCart method" should {
-//    "remove the item from Cart table table" in {
-//      testObj.addItemIntoCart(testUser.id, testItem1, 5)
-//      testObj.addItemIntoCart(testUser.id, testItem2, 5)
-//      val response = testObj.removeItemFromCart(testUser.id, testItem1.itemNo)
-//      whenReady(response) { value =>
-//        assert(value === 1)
-//      }
-//    }
-//  }
 }
