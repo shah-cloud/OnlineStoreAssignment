@@ -1,6 +1,7 @@
 package com.knoldus.onlinestoreservice.data.model
 
-case class CartSchema(userId: Int, itemNo: Int,
+case class CartSchema(userId: Int,
+                      itemNo: Int,
                       itemName: String,
                       itemDetail: String,
                       rating: Double,

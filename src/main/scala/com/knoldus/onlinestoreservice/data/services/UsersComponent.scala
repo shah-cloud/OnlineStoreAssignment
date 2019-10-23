@@ -6,10 +6,9 @@ import slick.lifted.ProvenShape
 
 trait UsersComponent {
 
-  val users = TableQuery[Users]
+  val users: TableQuery[Users] = TableQuery[Users]
 
   class Users(tag: Tag) extends Table[User](tag, "USERS") {
-
 
     def * : ProvenShape[User] = (id, name, emailId, phoneNo).<>(User.tupled, User.unapply)
 

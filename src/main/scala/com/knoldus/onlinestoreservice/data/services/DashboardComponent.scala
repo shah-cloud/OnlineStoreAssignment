@@ -8,95 +8,76 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait DashboardComponent extends VerifyUserComponent with CartComponent with ItemsComponent {
 
-  class DashboardServices(implicit ec: ExecutionContext) {
+  class DashboardServices(implicit ec: ExecutionContext = ExecutionContext.global) {
     this: DB =>
 
-
-    def getAllUsers = db.run {
-      users.result
-    }
-
-    def getUserProfile(userID: Int) = db.run {
+    def getUserProfile(userID: Int): Future[Seq[User]] = db.run {
       users.filter(_.id === userID).result
     }
 
-    def getClearVerivierData = db.run {
-      DBIO.seq(
-        verifier.schema.dropIfExists
-      )
-    }
-
-    def vall = db.run {
-      verifier.result
-    }
-
-    def getallItems = db.run {
+    def getallItems: Future[Seq[Item]] = db.run {
       items.result
     }
 
-    def getCartItems(userId: Int) = db.run {
+    def getCartItems(userId: Int): Future[Seq[CartSchema]] = db.run {
       cart.filter(_.userId === userId).result
     }
 
-    def insert(user: User) = db.run {
-      DBIO.seq(
+    def insert(user: User): Future[Int] = {
+      db.run(DBIO.seq(
         users.schema.createIfNotExists,
-        users += user
-      )
+      ))
+      db.run(users += user)
     }
 
-    def insert(item: Item) = db.run{
-      DBIO.seq(
+    def insert(item: Item): Future[Int] = {
+      db.run(DBIO.seq(
         items.schema.createIfNotExists,
-        items += item
-      )
+      ))
+      db.run(items += item)
     }
 
-    def addItemIntoCart(uId: Int, item: Item, q: Int) = {
-      val a: CartSchema = Item.unapply(item) match {
+    def addItemIntoCart(userId: Int, item: Item, quantity: Int): Future[Int] = {
+      val cartItem: CartSchema = Item.unapply(item) match {
         case Some(a) => a match {
-          case (a, b, c, d, e, f, g, h) => CartSchema(uId, a, b, c, d, e, f, g, h, q)
+          case (itemNo, itemName, itemDetail, rating, price, vendorName, vendorContact, itemCategory) => CartSchema(userId, itemNo, itemName, itemDetail, rating, price, vendorName, vendorContact, itemCategory, quantity)
         }
       }
       db.run(
         DBIO.seq(
           cart.schema.createIfNotExists,
-          cart += a
         )
       )
+      db.run(cart += cartItem)
     }
 
-    def update(user: User) = {
-      val cName = users.filter(_.id === user.id).map(_.name)
-      val cEmail = users.filter(_.id === user.id).map(_.emailId)
-      val cPh = users.filter(_.id === user.id).map(_.phoneNo)
+    def updateUserProfile(user: User): Future[Int] = db.run {
+      users.filter(_.id === user.id).map(_.name).update(user.name)
+      users.filter(_.id === user.id).map(_.emailId).update(user.emailId)
+      users.filter(_.id === user.id).map(_.phoneNo).update(user.phoneNo)
+    }
 
+    def authenticateUser(userId: Int, verification: String): Future[Int] = {
       db.run(DBIO.seq(
-        cName.update(user.name), cEmail.update(user.emailId), cPh.update(user.phoneNo)
+        verifier.schema.createIfNotExists
       ))
+      db.run(verifier += (userId, verification))
     }
 
-    def authenticateUser(id: Int, verification: String) = db.run {
-      DBIO.seq(
-        verifier.schema.createIfNotExists,
-        verifier += (id, verification),
-      )
-    }
-
-    def authenticateUser(id: Int) = db.run {
-      verifier.filter(x => x.userId === id).result
+    def authenticateUser(id: Int): Future[Seq[(Int, String)]] = db.run {
+      verifier.filter(_.userId === id).result
     }
 
 
-    def verifyUser(id: Int, verification: String) = db.run{
+    def verifyUser(id: Int, verification: String): Future[Int] = db.run {
       verifier.filter(_.userId === id).map(_.emailVerify).update(verification)
     }
 
-    def removeItem(userId: Int, itemNo: Int) = db.run{
+    def removeItemFromCart(userId: Int, itemNo: Int): Future[Int] = db.run {
       cart.filter(value => value.itemNo === itemNo && value.userId === userId).delete
     }
 
-    def getClearCart(userId: Int) = db.run{
+    def getClearCart(userId: Int): Future[Int] = db.run {
       cart.filter(_.userId === userId).delete
     }
 

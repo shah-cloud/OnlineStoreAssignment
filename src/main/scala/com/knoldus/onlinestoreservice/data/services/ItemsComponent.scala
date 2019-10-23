@@ -2,9 +2,11 @@ package com.knoldus.onlinestoreservice.data.services
 
 import com.knoldus.onlinestoreservice.data.model.Item
 import slick.jdbc.MySQLProfile.api._
-import slick.lifted.ProvenShape
+import slick.lifted.{ProvenShape, QueryBase}
 
 trait ItemsComponent {
+
+  val items: TableQuery[Items] = TableQuery[Items]
 
   class Items(tag: Tag) extends Table[Item](tag, "ITEMS") {
 
@@ -27,7 +29,5 @@ trait ItemsComponent {
     def itemCategory: Rep[String] = column[String]("itemCategory")
 
   }
-
-  val items = TableQuery[Items]
 
 }

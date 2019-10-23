@@ -6,14 +6,15 @@ import com.knoldus.onlinestoreservice.dashboard.util.JsonSupport
 import com.knoldus.onlinestoreservice.data.model.{Item, User}
 import com.knoldus.onlinestoreservice.data.services.DashboardComponent
 
+import scala.concurrent.ExecutionContext
 
-class Routes(repo: DashboardComponent#DashboardServices) extends JsonSupport {
+class Routes(repo: DashboardComponent#DashboardServices)(implicit ex: ExecutionContext) extends JsonSupport {
 
   val route: Route =
     concat(
       path("addItem") {
         post {
-          entity(as[Item]) { item => // will unmarshal JSON to Order
+          entity(as[Item]) { item =>
             repo.insert(item)
             complete(s"Item added successfully")
           }
@@ -21,7 +22,7 @@ class Routes(repo: DashboardComponent#DashboardServices) extends JsonSupport {
       },
       path("registeration") {
         post {
-          entity(as[User]) { user => // will unmarshal JSON to Order
+          entity(as[User]) { user =>
             repo.insert(user)
             repo.authenticateUser(user.id, "no")
             val id = user.id
@@ -119,11 +120,11 @@ class Routes(repo: DashboardComponent#DashboardServices) extends JsonSupport {
         }
       },
       get {
-        path("removeItemFromCart" / IntNumber / IntNumber) { (userId, itemNo) => // will unmarshal JSON to Order
+        path("removeItemFromCart" / IntNumber / IntNumber) { (userId, itemNo) =>
 
           onComplete(repo.authenticateUser(userId)) {
             case util.Success(res) if res.head._2 == "yes" =>
-              repo.removeItem(userId, itemNo)
+              repo.removeItemFromCart(userId, itemNo)
               val cartlink = s"http://localhost:8080/cart/$userId"
               complete(s"Item removed successfully\nHere is your cart link:\n $cartlink")
             case util.Success(res) =>
@@ -133,26 +134,10 @@ class Routes(repo: DashboardComponent#DashboardServices) extends JsonSupport {
           }
         }
       },
-      path("verifierdata") {
-        get {
-          complete(repo.vall)
-        }
-      },
-      path("removeVerifierdata") {
-        get {
-          repo.getClearVerivierData
-          complete("Cleared Successfully")
-        }
-      },
-      path("userdata") {
-        get {
-          complete(repo.getAllUsers)
-        }
-      },
       path("edit-profile") {
         post {
-          entity(as[User]) { user => // will unmarshal JSON to Order
-            repo.update(user)
+          entity(as[User]) { user =>
+            repo.updateUserProfile(user)
             complete("Updated successfully")
           }
         }
