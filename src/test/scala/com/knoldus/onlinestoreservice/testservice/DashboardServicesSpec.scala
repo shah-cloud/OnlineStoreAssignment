@@ -5,7 +5,7 @@ import org.scalatest.AsyncWordSpec
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{ Millis, Seconds, Span }
 
-class InventoryServicesSpec extends AsyncWordSpec with ScalaFutures {
+class DashboardServicesSpec extends AsyncWordSpec with ScalaFutures {
 
   implicit def defaultPatience: PatienceConfig = PatienceConfig(timeout = Span(4, Seconds), interval = Span(500, Millis))
 
