@@ -43,7 +43,7 @@ class DashboardServicesSpec extends AsyncWordSpec with ScalaFutures {
       testObj.insert(testItem3)
       val response = testObj.getallItems
       whenReady(response) { items =>
-        assert(items === Vector(testItem1, testItem2, testItem3))
+        assert(items === Vector(testItem2, testItem3, testItem1))
       }
     }
   }
