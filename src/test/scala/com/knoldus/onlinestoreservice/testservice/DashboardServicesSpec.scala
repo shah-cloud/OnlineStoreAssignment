@@ -3,11 +3,11 @@ package com.knoldus.onlinestoreservice.testservice
 import com.knoldus.onlinestoreservice.testconstant.TestConstants._
 import org.scalatest.AsyncWordSpec
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{ Millis, Seconds, Span }
+import org.scalatest.time.{Millis, Seconds, Span}
 
 class DashboardServicesSpec extends AsyncWordSpec with ScalaFutures {
 
-  implicit def defaultPatience: PatienceConfig = PatienceConfig(timeout = Span(4, Seconds), interval = Span(500, Millis))
+  implicit def defaultPatience: PatienceConfig = PatienceConfig(timeout = Span(5, Seconds), interval = Span(500, Millis))
 
   "insert new item method " should {
     "add the items" in {
@@ -43,7 +43,7 @@ class DashboardServicesSpec extends AsyncWordSpec with ScalaFutures {
       testObj.insert(testItem3)
       val response = testObj.getallItems
       whenReady(response) { items =>
-        assert(items === Vector(testItem1,testItem2,testItem3))
+        assert(items === Vector(testItem1, testItem2, testItem3))
       }
     }
   }
@@ -79,7 +79,7 @@ class DashboardServicesSpec extends AsyncWordSpec with ScalaFutures {
     "return the details corresponding to the given user id" in {
       val response = testObj.authenticateUser(testUser.id)
       whenReady(response) { verify =>
-        assert(verify === Vector((124,"no")))
+        assert(verify === Vector((124, "no")))
       }
     }
   }
@@ -95,7 +95,7 @@ class DashboardServicesSpec extends AsyncWordSpec with ScalaFutures {
 
   "verifyUser method" should {
     "update the verifyUser table" in {
-      val response = testObj.verifyUser(testUser.id,"yes")
+      val response = testObj.verifyUser(testUser.id, "yes")
       whenReady(response) { value =>
         assert(value === 1)
       }
