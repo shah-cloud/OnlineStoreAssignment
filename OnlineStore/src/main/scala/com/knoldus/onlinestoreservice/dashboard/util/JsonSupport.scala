@@ -1,8 +1,8 @@
 package com.knoldus.onlinestoreservice.dashboard.util
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import com.knoldus.onlinestoreservice.data.model.{ CartSchema, Item, User }
-import spray.json.{ DefaultJsonProtocol, RootJsonFormat }
+import com.knoldus.onlinestoreservice.model.{CartSchema, Item, User}
+import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 

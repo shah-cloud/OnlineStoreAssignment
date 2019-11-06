@@ -1,4 +1,4 @@
-package com.knoldus.onlinestoreservice.data.model
+package com.knoldus.onlinestoreservice.model
 
 case class CartSchema(
   userId: Int,

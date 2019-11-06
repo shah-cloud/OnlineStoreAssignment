@@ -3,8 +3,9 @@ package com.knoldus.onlinestoreservice.routes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import com.knoldus.onlinestoreservice.dashboard.util.JsonSupport
-import com.knoldus.onlinestoreservice.data.model.{ Item, User }
-import com.knoldus.onlinestoreservice.data.services.DashboardComponent
+import com.knoldus.onlinestoreservice.dashboard.util.LoggerUtil.logger
+import com.knoldus.onlinestoreservice.model.{Item, User}
+import com.knoldus.onlinestoreservice.services.DashboardComponent
 
 trait Routes extends JsonSupport with DashboardComponent {
 
@@ -15,6 +16,7 @@ trait Routes extends JsonSupport with DashboardComponent {
       path("addItem") {
         post {
           entity(as[Item]) { item =>
+            logger.info(s"Route 'addItem' hiting with argument $item")
             onComplete(repo.insert(item)) {
               case util.Success(value) if value == 1 => complete("Item added successfully")
               case util.Success(value) => complete("Item is not added")
@@ -26,6 +28,7 @@ trait Routes extends JsonSupport with DashboardComponent {
       path("registeration") {
         post {
           entity(as[User]) { user =>
+            logger.info(s"Route 'registeration' hiting with argument $user")
             onComplete(repo.insert(user)) {
               case util.Success(value) if value == 1 => onComplete(repo.authenticateUser(user.id, "no")) {
                 case util.Success(value) if value == 1 =>
@@ -43,6 +46,7 @@ trait Routes extends JsonSupport with DashboardComponent {
       },
       get {
         path("verification-link" / IntNumber) { userId =>
+          logger.info(s"Route 'verification-link/$userId' hiting")
           onComplete(repo.authenticateUser(userId)) {
             case util.Success(res) if res.head._2 == "yes" =>
               val loginlink = s"http://localhost:8080/login-link/$userId"
@@ -61,6 +65,7 @@ trait Routes extends JsonSupport with DashboardComponent {
       },
       get {
         path("login-link" / IntNumber) { userId =>
+          logger.info(s"Route 'login-link/$userId' hiting")
           onComplete(repo.authenticateUser(userId)) {
             case util.Success(res) if res.head._2 == "yes" =>
               val cartLink = s"http://localhost:8080/cart/$userId"
@@ -86,6 +91,7 @@ trait Routes extends JsonSupport with DashboardComponent {
       },
       get {
         path("items-list") {
+          logger.info("Route 'items-list' hiting")
           complete {
             repo.getallItems
           }
@@ -93,21 +99,25 @@ trait Routes extends JsonSupport with DashboardComponent {
       },
       get {
         pathPrefix("sortByPrice" / Segment) { order =>
+          logger.info(s"Route 'sortByPrice/$order' hiting")
           complete(repo.sortPrice(order))
         }
       },
       get {
         pathPrefix("sortByRating" / Segment) { order =>
+          logger.info(s"Route 'sortByRating/$order' hiting")
           complete(repo.sortRating(order))
         }
       },
       get {
         pathPrefix("sortByCategory" / Segment) { order =>
+          logger.info(s"Route 'sortByCategory/$order' hiting")
           complete(repo.sortCategory(order))
         }
       },
       get {
         path("cart" / IntNumber) { userId =>
+          logger.info(s"Route 'cart/$userId' hiting")
           onComplete(repo.authenticateUser(userId)) {
             case util.Success(res) if res.head._2 == "yes" =>
               complete(repo.getCartItems(userId))
@@ -120,6 +130,7 @@ trait Routes extends JsonSupport with DashboardComponent {
       },
       post {
         path("addItemIntoCart" / IntNumber / IntNumber) { (userId, quantity) =>
+          logger.info(s"Route 'addItemIntoCart/$userId/$quantity' hiting")
           entity(as[Item]) { item =>
             onComplete(repo.authenticateUser(userId)) {
               case util.Success(res) if res.head._2 == "yes" =>
@@ -142,6 +153,7 @@ trait Routes extends JsonSupport with DashboardComponent {
       },
       get {
         path("removeItemFromCart" / IntNumber / IntNumber) { (userId, itemNo) =>
+          logger.info(s"Route 'removeItemFromCart/$userId/$itemNo' hiting")
           onComplete(repo.authenticateUser(userId)) {
             case util.Success(res) if res.head._2 == "yes" =>
               onComplete(repo.removeItemFromCart(userId, itemNo)) {
@@ -163,6 +175,7 @@ trait Routes extends JsonSupport with DashboardComponent {
       path("edit-profile") {
         post {
           entity(as[User]) { user =>
+            logger.info(s"Route 'edit-profile' hiting with argument $user")
             repo.updateUserProfile(user)
             val userId = user.id
             val profileLink = s"http://localhost:8080/user-profile/$userId"
@@ -172,13 +185,16 @@ trait Routes extends JsonSupport with DashboardComponent {
       },
       get {
         path("user-profile" / IntNumber) { userId =>
+          logger.info(s"Route 'user-profile/$userId' hiting")
           complete(repo.getUserProfile(userId))
         }
       },
       get {
         path("place-order" / IntNumber) { userId =>
+          logger.info(s"Route 'place-order/$userId' hiting")
           onComplete(repo.getClearCart(userId)) {
             case util.Success(value) if value == 1 =>
+              logger.info(s"Route 'place-order/$userId' hiting")
               val cartlink = s"http://localhost:8080/cart/$userId"
               complete(s"Order has placed successfully\nHere is your cart link:\n$cartlink")
             case util.Success(res) =>
