@@ -1,4 +1,4 @@
-package com.knoldus.onlinestoreservice.data.services
+package com.knoldus.onlinestoreservice.services
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http

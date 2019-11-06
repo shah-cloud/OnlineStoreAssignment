@@ -1,6 +1,6 @@
-package com.knoldus.onlinestoreservice.data.services
+package com.knoldus.onlinestoreservice.services
 
-import com.knoldus.onlinestoreservice.data.model.User
+import com.knoldus.onlinestoreservice.model.User
 import slick.jdbc.MySQLProfile.api._
 import slick.lifted.ProvenShape
 

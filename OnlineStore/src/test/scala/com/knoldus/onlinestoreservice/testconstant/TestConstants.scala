@@ -1,7 +1,7 @@
 package com.knoldus.onlinestoreservice.testconstant
 
-import com.knoldus.onlinestoreservice.data.model.{ CartSchema, Item, User }
-import com.knoldus.onlinestoreservice.data.services.DashboardComponent
+import com.knoldus.onlinestoreservice.model.{CartSchema, Item, User}
+import com.knoldus.onlinestoreservice.services.DashboardComponent
 import com.knoldus.onlinestoreservice.testconnection.H2Impl
 
 object TestConstants extends DashboardComponent {

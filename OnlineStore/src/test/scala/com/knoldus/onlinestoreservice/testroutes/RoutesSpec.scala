@@ -5,9 +5,9 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.util.ByteString
 import com.knoldus.onlinestoreservice.dashboard.util.JsonSupport
-import com.knoldus.onlinestoreservice.data.model.{CartSchema, Item, User}
-import com.knoldus.onlinestoreservice.data.services.DashboardComponent
+import com.knoldus.onlinestoreservice.model.{CartSchema, Item, User}
 import com.knoldus.onlinestoreservice.routes.Routes
+import com.knoldus.onlinestoreservice.services.DashboardComponent
 import com.knoldus.onlinestoreservice.testconstant.TestConstants.{testCartItem, testItem1, testItem2, testUser}
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar

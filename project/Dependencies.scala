@@ -19,13 +19,12 @@ object Dependencies {
   val slickTest3: ModuleID = "com.typesafe.akka" %% "akka-stream-testkit" % "2.5.23"
   val slickTest4: ModuleID = "org.postgresql" % "postgresql" % "42.2.5"
   val h2: ModuleID = "com.h2database" % "h2" % "1.4.192"
-//  val mock = "org.mockito" %% "mockito-all" % "1.9.5" % "test"
-
+  val logback2: ModuleID = "log4j" % "log4j" % "1.2.14"
   /** Test libraries */
   val scalaTest: ModuleID = "org.scalatest" %% "scalatest" % scalaTestVersion
 
   val mock: ModuleID = "org.mockito" % "mockito-core" % "2.27.0"
 
-  val dashboardDependencies: Seq[ModuleID] = Seq(slickTest2, slickTest3, slickTest4, akkaHttp, slickDb, akkaStream, h2, scalaTest, akkaSprayJson, mock, playJson, logback, config, slick, mysqlConnec)
+  val dashboardDependencies: Seq[ModuleID] = Seq(slickTest2, slickTest3, slickTest4, akkaHttp, slickDb, akkaStream, h2, scalaTest, akkaSprayJson, mock, playJson, logback2, logback, config, slick, mysqlConnec)
 
 }

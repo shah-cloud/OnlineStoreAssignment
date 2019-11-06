@@ -1,8 +1,8 @@
-package com.knoldus.onlinestoreservice.data.services
+package com.knoldus.onlinestoreservice.services
 
-import com.knoldus.onlinestoreservice.data.model.{ CartSchema, User }
+import com.knoldus.onlinestoreservice.model.{CartSchema, User}
 import slick.jdbc.MySQLProfile.api._
-import slick.lifted.{ ForeignKeyQuery, ProvenShape }
+import slick.lifted.{ForeignKeyQuery, ProvenShape}
 
 trait CartComponent extends UsersComponent {
 
@@ -13,8 +13,6 @@ trait CartComponent extends UsersComponent {
     def * : ProvenShape[CartSchema] = {
       (userId, itemNo, itemName, itemDetail, rating, price, vendorName, vendorContact, itemCategory, quantity).<>(CartSchema.tupled, CartSchema.unapply)
     }
-
-    def userId: Rep[Int] = column[Int]("userId")
 
     def itemNo: Rep[Int] = column[Int]("itemNo")
 
@@ -37,6 +35,8 @@ trait CartComponent extends UsersComponent {
     def userIdFk: ForeignKeyQuery[Users, User] = {
       foreignKey("USER_ID_FK", userId, users)(_.id, onUpdate = ForeignKeyAction.Restrict, onDelete = ForeignKeyAction.Cascade)
     }
+
+    def userId: Rep[Int] = column[Int]("userId")
 
   }
 
